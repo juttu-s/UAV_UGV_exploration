@@ -1,0 +1,7 @@
+<launch>
+  <!-- Map Fusion Node - Injects UGV data into UAV's dynamicMap -->
+  <node pkg="map_manager" type="map_fusion_node" name="map_fusion" output="screen">
+    <param name="fusion_period" value="1.0" />
+    <param name="ugv_cloud_topic" value="/voxel_grid/output" />
+  </node>
+</launch>

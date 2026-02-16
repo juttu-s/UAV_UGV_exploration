@@ -1,0 +1,13 @@
+<launch>
+  <arg name="pose_topic" default="/CERLAB/quadcopter/pose"/>
+
+  <node name="quadcopterTF" pkg="uav_simulator" type="quadcopterTFBroadcaster"
+        args="$(arg pose_topic)" output="screen">
+    <param name="parent_frame" value="map"/>
+    <param name="child_frame"  value="uav1/base_link"/>  <!-- or uav1/odom -->
+  </node>
+
+  <!-- Keep camera TF, but prefix it to UAV frames -->
+  <node pkg="tf" type="static_transform_publisher" name="uav1_baselink_cameralink"
+        args="0.09 0.0 0.095 -1.57 0 -1.57 uav1/base_link uav1/camera_link 1000"/>
+</launch>

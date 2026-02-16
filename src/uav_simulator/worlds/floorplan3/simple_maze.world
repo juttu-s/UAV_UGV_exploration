@@ -1,0 +1,142 @@
+
+<sdf version='1.7'>
+  <world name='simple_maze'>
+    
+    <!-- Lighting -->
+    <light name='sun' type='directional'>
+      <cast_shadows>1</cast_shadows>
+      <pose>0 0 10 0 -0 0</pose>
+      <diffuse>0.8 0.8 0.8 1</diffuse>
+      <specular>0.2 0.2 0.2 1</specular>
+      <attenuation>
+        <range>1000</range>
+        <constant>0.9</constant>
+        <linear>0.01</linear>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+      <direction>-0.5 0.1 -0.9</direction>
+    </light>
+
+    <!-- Ground Plane -->
+    <model name='ground_plane'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>20 20</size>
+            </plane>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>100</mu>
+                <mu2>50</mu2>
+              </ode>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <cast_shadows>0</cast_shadows>
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>20 20</size>
+            </plane>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <n>Gazebo/DarkGrey</n>
+            </script>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Physics -->
+    <physics type='ode'>
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1</real_time_factor>
+      <real_time_update_rate>1000</real_time_update_rate>
+    </physics>
+
+    <!-- Maze Structure -->
+    <model name='simple_maze'>
+      <pose>0 0 0 0 0 0</pose>
+      <static>1</static>
+
+      <!-- Boundary Walls (15x15m interior) -->
+      <link name='North_Wall'>
+        <pose>0 7.75 1.5 0 0 0</pose>
+        <collision name='col'><geometry><box><size>15.5 0.5 3</size></box></geometry></collision>
+        <visual name='vis'><geometry><box><size>15.5 0.5 3</size></box></geometry>
+        <material><script><name>Gazebo/Wood</name></script></material></visual>
+      </link>
+      <link name='South_Wall'>
+        <pose>0 -7.75 1.5 0 0 0</pose>
+        <collision name='col'><geometry><box><size>15.5 0.5 3</size></box></geometry></collision>
+        <visual name='vis'><geometry><box><size>15.5 0.5 3</size></box></geometry>
+        <material><script><name>Gazebo/Wood</name></script></material></visual>
+      </link>
+      <link name='East_Wall'>
+        <pose>7.75 0 1.5 0 0 0</pose>
+        <collision name='col'><geometry><box><size>0.5 16 3</size></box></geometry></collision>
+        <visual name='vis'><geometry><box><size>0.5 16 3</size></box></geometry>
+        <material><script><name>Gazebo/Wood</name></script></material></visual>
+      </link>
+      <link name='West_Wall'>
+        <pose>-7.75 0 1.5 0 0 0</pose>
+        <collision name='col'><geometry><box><size>0.5 16 3</size></box></geometry></collision>
+        <visual name='vis'><geometry><box><size>0.5 16 3</size></box></geometry>
+        <material><script><name>Gazebo/Wood</name></script></material></visual>
+      </link>
+
+      <!-- Interior Maze Walls (simple layout with wide passages) -->
+      
+      <!-- Horizontal wall from west, with gap on right -->
+      <link name='Maze_Wall_1'>
+        <pose>-3 3 1 0 0 0</pose>
+        <collision name='col'><geometry><box><size>5 0.3 2</size></box></geometry></collision>
+        <visual name='vis'><geometry><box><size>5 0.3 2</size></box></geometry>
+        <material><script><n>Gazebo/Bricks</n></script></material></visual>
+      </link>
+
+      <!-- Vertical wall from north, with gap at bottom -->
+      <link name='Maze_Wall_2'>
+        <pose>3 4 1 0 0 0</pose>
+        <collision name='col'><geometry><box><size>0.3 4 2</size></box></geometry></collision>
+        <visual name='vis'><geometry><box><size>0.3 4 2</size></box></geometry>
+        <material><script><n>Gazebo/Bricks</n></script></material></visual>
+      </link>
+
+      <!-- Horizontal wall from east, with gap on left -->
+      <link name='Maze_Wall_3'>
+        <pose>3 -2 1 0 0 0</pose>
+        <collision name='col'><geometry><box><size>6 0.3 2</size></box></geometry></collision>
+        <visual name='vis'><geometry><box><size>6 0.3 2</size></box></geometry>
+        <material><script><n>Gazebo/Bricks</n></script></material></visual>
+      </link>
+
+      <!-- Vertical wall from south, with gap at top -->
+      <link name='Maze_Wall_4'>
+        <pose>-3 -4 1 0 0 0</pose>
+        <collision name='col'><geometry><box><size>0.3 4 2</size></box></geometry></collision>
+        <visual name='vis'><geometry><box><size>0.3 4 2</size></box></geometry>
+        <material><script><n>Gazebo/Bricks</n></script></material></visual>
+      </link>
+
+      <!-- Small center blocker to create routing choice -->
+      <!-- <link name='Center_Block'>
+        <pose>0 0 1 0 0 0</pose>
+        <collision name='col'><geometry><box><size>2 2 2</size></box></geometry></collision>
+        <visual name='vis'><geometry><box><size>2 2 2</size></box></geometry>
+        <material><script><n>Gazebo/Blue</n></script></material></visual>
+      </link> -->
+
+
+    </model>
+
+  </world>
+</sdf>

@@ -1,0 +1,23 @@
+<launch>
+  <node pkg="octomap_server" type="octomap_server_node" name="common_map_server" output="screen">
+    
+    <param name="resolution" value="0.1" />
+    
+    <param name="frame_id" type="string" value="map" />
+    
+    <remap from="cloud_in" to="/fusion/common_input" />
+    
+    <param name="sensor_model/max_range" value="50.0" />
+    <param name="latch" value="false" /> 
+
+    <param name="occupancy_min_z" value="0.0"/>
+    <param name="occupancy_max_z" value="2.0"/>
+  </node>
+
+  <node pkg="topic_tools" type="relay" name="relay_ugv" 
+        args="/voxel_grid/output /fusion/common_input" />
+
+  <node pkg="topic_tools" type="relay" name="relay_uav" 
+        args="/dynamic_map/voxel_map /fusion/common_input" />
+
+</launch>

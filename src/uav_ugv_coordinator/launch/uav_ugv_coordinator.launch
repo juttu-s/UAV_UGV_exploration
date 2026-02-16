@@ -1,0 +1,38 @@
+<launch>
+  <!-- MAVROS topic remaps (match your working setup) -->
+  <remap from="/mavros/local_position/odom" to="CERLAB/quadcopter/odom" />
+  <remap from="/mavros/setpoint_raw/local" to="CERLAB/quadcopter/cmd_acc" />
+
+  <!-- Controller config + node (required if you call takeoff/moveToOrientation/stop) -->
+  <rosparam file="$(find tracking_controller)/cfg/controller_param.yaml" ns="controller"/>
+  <node pkg="tracking_controller" type="tracking_controller_node" name="tracking_controller_node" output="screen"/>
+
+  <!-- Load EXACTLY the same parameter files / namespaces as in dynamic_exploration.launch -->
+  <rosparam file="$(find autonomous_flight)/cfg/dynamic_inspection/fake_detector_param.yaml" />   <!-- global -->
+  <rosparam file="$(find autonomous_flight)/cfg/dynamic_exploration/flight_base.yaml" ns="autonomous_flight"/>
+  <rosparam file="$(find autonomous_flight)/cfg/dynamic_exploration/exploration_param.yaml" ns="DEP"/>
+  <rosparam file="$(find autonomous_flight)/cfg/dynamic_exploration/planner_param.yaml" />       <!-- global -->
+  <rosparam file="$(find autonomous_flight)/cfg/dynamic_exploration/dynamic_detector_param.yaml" ns="/onboard_detector" />
+  <rosparam file="$(find autonomous_flight)/cfg/dynamic_exploration/mapping_param.yaml" ns="/dynamic_map" />
+
+  <!-- Optional: same throttling helper your working launch used -->
+  <node pkg="autonomous_flight" type="throttle_topics.sh" name="throttle_topics" />
+
+  <!-- Coordinator (it constructs dynamicExploration with a GLOBAL NodeHandle) -->
+  <node pkg="uav_ugv_coordinator"
+        type="uav_ugv_coordinator"
+        name="uav_ugv_coordinator"
+        output="screen">
+    <!-- Coordinator’s own params (unchanged) -->
+    <param name="map_frame" value="map"/>
+    <param name="takeoff_alt" value="1.2"/>
+    <param name="scan_hold_sec" value="5.0"/>
+    <param name="ugv_nav_timeout_sec" value="300.0"/>
+    <param name="reach_tol_xyz" value="0.25"/>
+    <param name="ground_goal_topic" value="/global_planner/highest_gain_ground"/>
+    <param name="ground_goal_topic" value="/global_planner/highest_gain_xy"/>
+    <param name="request_op_topic" value="/global_planner/request_op"/>
+    <param name="op_path_topic" value="/dep/best_paths"/>
+    <param name="ext_waypoints_topic" value="/uav_ugv_coordinator/waypoints"/>
+  </node>
+</launch>
